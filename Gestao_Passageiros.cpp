@@ -12,7 +12,7 @@ struct Passageiro {
    string autorizacaoResponsavel;
 };
 
-bool ehMenorDeIdade(const string& dataNascimento) {
+bool ehMenorDeIdade(string& dataNascimento) {
     time_t t = time(0);
     tm* agora = localtime(&t);
 
@@ -27,8 +27,8 @@ bool ehMenorDeIdade(const string& dataNascimento) {
     return idade < 18;
 }
 
-bool cpfExiste(const vector<Passageiro>& passageiros, const string& cpf) {
-    for(const auto& passageiro : passageiros) {
+bool cpfExiste(vector<Passageiro>& passageiros, string& cpf) {
+    for(auto& passageiro : passageiros) {
         if (passageiro.cpf == cpf) {
             return true; // O CPF já existe
         }
@@ -36,7 +36,7 @@ bool cpfExiste(const vector<Passageiro>& passageiros, const string& cpf) {
     return false; // O CPF não existe
 }
 
-bool formatoCPFValido(const string& cpf) {
+bool formatoCPFValido(string& cpf) {
     // Verifica se o CPF possui 11 caracteres (incluindo dígitos e pontuação)
     if (cpf.size() != 14) {
         return false;
@@ -192,9 +192,9 @@ void AlterarPassageiro(vector<Passageiro>& passageiros) {
 
 
 
-void ListarPassageiros(const vector<Passageiro>& passageiros) {
+void ListarPassageiros(vector<Passageiro>& passageiros) {
    cout << "Lista de Passageiros:\n";
-   for(const auto& passageiro : passageiros) {
+   for(auto& passageiro : passageiros) {
        cout << "Nome: " << passageiro.nome << ", CPF: " << passageiro.cpf << ", Idade: " << passageiro.dataNascimento;
        if (ehMenorDeIdade(passageiro.dataNascimento)) {
             cout << ", Autorização do Responsável: " << passageiro.autorizacaoResponsavel;
@@ -205,12 +205,12 @@ void ListarPassageiros(const vector<Passageiro>& passageiros) {
 }
 
 
-void LocalizarPassageiro(const vector<Passageiro>& passageiros) {
+void LocalizarPassageiro(vector<Passageiro>& passageiros) {
    string cpf;
    cout << "Digite o CPF do passageiro a ser localizado: ";
    getline(cin, cpf);
 
-   for(const auto& passageiro : passageiros) {
+   for(auto& passageiro : passageiros) {
        if (passageiro.cpf == cpf) {
            cout << "Nome: " << passageiro.nome << ", CPF: " << passageiro.cpf << ", Idade: " << passageiro.dataNascimento << "\n";
            return;

@@ -9,16 +9,14 @@ using namespace std;
 
 struct Roteiro {
     string codigo;
-    string descricao;
-    float preco;
     string Data_Hora_Prevista;
-    float Duracao_Prevista;
+    string Duracao_Prevista;
     string Origem;
     string Destino;
 };
 
-bool codigoExiste(const vector<Roteiro>& roteiros, const string& codigo) {
-    for(const auto& roteiro : roteiros) {
+bool codigoExiste(vector<Roteiro> &roteiros, string &codigo) {
+    for(auto &roteiro : roteiros) {
         if (roteiro.codigo == codigo) {
             return true; 
         }
@@ -26,7 +24,7 @@ bool codigoExiste(const vector<Roteiro>& roteiros, const string& codigo) {
     return false; 
 }
 
-bool ehDataValida(const string& dataPrevista) {
+bool ehDataValida(string &dataPrevista) {
     tm tmPrevista = {};
     istringstream ss(dataPrevista);
     ss >> get_time(&tmPrevista, "%d/%m/%Y %H:%M");
@@ -41,7 +39,7 @@ bool ehDataValida(const string& dataPrevista) {
     return tPrevista >= agora; 
 }
 
-void IncluirRoteiro(vector<Roteiro>& roteiros) {
+void IncluirRoteiro(vector<Roteiro> &roteiros) {
     Roteiro novoRoteiro;
     string codigo;
     do {
@@ -55,12 +53,6 @@ void IncluirRoteiro(vector<Roteiro>& roteiros) {
 
     novoRoteiro.codigo = codigo;
 
-    cout << "Descrição: ";
-    getline(cin, novoRoteiro.descricao);
-    cout << "Preço: ";
-    cin >> novoRoteiro.preco;
-    cin.ignore(); 
-
     string dataPrevista;
     do {
         cout << "Data e Hora Prevista (dd/mm/yyyy hh:mm): ";
@@ -72,7 +64,7 @@ void IncluirRoteiro(vector<Roteiro>& roteiros) {
     } while (dataPrevista == "");
     novoRoteiro.Data_Hora_Prevista = dataPrevista;
 
-    cout << "Duração Prevista (em horas): ";
+    cout << "Duração Prevista: ";
     cin >> novoRoteiro.Duracao_Prevista;
     cin.ignore();
 
@@ -87,7 +79,7 @@ void IncluirRoteiro(vector<Roteiro>& roteiros) {
 }
 
 
-void ExcluirRoteiro(vector<Roteiro>& roteiros) {
+void ExcluirRoteiro(vector<Roteiro> &roteiros) {
     string codigo;
     cout << "Digite o Código do roteiro a ser excluído: ";
     getline(cin, codigo);
@@ -103,35 +95,54 @@ void ExcluirRoteiro(vector<Roteiro>& roteiros) {
     cout << "Roteiro com Código " << codigo << " não encontrado.\n";
 }
 
-void AlterarRoteiro(vector<Roteiro>& roteiros) {
+void AlterarRoteiro(vector<Roteiro> &roteiros) {
     string codigo;
-    cout << "Digite o Código do roteiro a ser alterado: ";
+    cout << "Codigo: ";
     getline(cin, codigo);
+
 
     for(auto& roteiro : roteiros) {
         if (roteiro.codigo == codigo) {
-            cout << "Dados do Roteiro:\n";
-            cout << "Código: " << roteiro.codigo << ", Descrição: " << roteiro.descricao << ", Preço: " << roteiro.preco << "\n";
+            cout << "Dados do Passageiro:\n";
+            cout << "Data e Hora: " << roteiro.Data_Hora_Prevista << ", Duração Prevista: " << roteiro.Duracao_Prevista << ", Origem e Destino: " << roteiro.Origem << " - " << roteiro.Destino << endl;
 
-            char alterarDescricao, alterarPreco;
 
-            cout << "Deseja alterar a Descrição (S/N)? ";
-            cin >> alterarDescricao;
+            char alterarDataHora, alterarDuracao, alterarOrigem, alterarDestino;
+
+            cout << "Deseja alterar Data Hora Prevista (S/N)? ";
+            cin >> alterarDataHora;
             cin.ignore();
 
-            if(alterarDescricao == 'S' || alterarDescricao == 's') {
-                cout << "Nova Descrição: ";
-                getline(cin, roteiro.descricao);
+            if(alterarDataHora == 'S' || alterarDataHora == 's') {
+                cout << "Nova Data Hora Prevista: ";
+                getline(cin, roteiro.Data_Hora_Prevista);
             }
 
-            cout << "Deseja alterar o Preço (S/N)? ";
-            cin >> alterarPreco;
+            cout << "Deseja alterar Duração (S/N)? ";
+            cin >> alterarDuracao;
             cin.ignore();
 
-            if(alterarPreco == 'S' || alterarPreco == 's') {
-                cout << "Novo Preço: ";
-                cin >> roteiro.preco;
-                cin.ignore(); 
+            if(alterarDuracao == 'S' || alterarDuracao == 's') {
+                cout << "Nova Duração: ";
+                getline(cin, roteiro.Duracao_Prevista);
+            }
+
+            cout << "Deseja alterar Origem (S/N)? ";
+            cin >> alterarOrigem;
+            cin.ignore();
+
+            if(alterarOrigem == 'S' || alterarOrigem == 's') {
+                cout << "Nova origem: ";
+                getline(cin, roteiro.Origem);
+            }
+
+            cout << "Deseja alterar Destino (S/N)? ";
+            cin >> alterarDestino;
+            cin.ignore();
+
+            if(alterarDestino == 'S' || alterarDestino == 's') {
+                cout << "Novo destino: ";
+                getline(cin, roteiro.Destino);
             }
 
             cout << "Roteiro alterado com sucesso!\n";
@@ -139,24 +150,24 @@ void AlterarRoteiro(vector<Roteiro>& roteiros) {
         }
     }
 
-    cout << "Roteiro com Código " << codigo << " não encontrado.\n";
+    cout << "Código " << codigo << " não encontrado.\n";
 }
 
-void ListarRoteiros(const vector<Roteiro>& roteiros) {
+void ListarRoteiros(vector<Roteiro> &roteiros) {
     cout << "Lista de Roteiros:\n";
-    for(const auto& roteiro : roteiros) {
-        cout << "Código: " << roteiro.codigo << ", Descrição: " << roteiro.descricao << ", Preço: " << roteiro.preco << ", Data e Hora Prevista: " << roteiro.Data_Hora_Prevista << ", Duração Prevista: " << roteiro.Duracao_Prevista << ", Origem: " << roteiro.Origem << ", Destino: " << roteiro.Destino << "\n";
+    for(auto &roteiro : roteiros) {
+        cout << "Código: " << roteiro.codigo << ", Descrição: " << ", Data e Hora Prevista: " << roteiro.Data_Hora_Prevista << ", Duração Prevista: " << roteiro.Duracao_Prevista << ", Origem: " << roteiro.Origem << ", Destino: " << roteiro.Destino << "\n";
     }
 }
 
-void LocalizarRoteiro(const vector<Roteiro>& roteiros) {
+void LocalizarRoteiro(vector<Roteiro> &roteiros) {
     string codigo;
     cout << "Digite o Código do roteiro a ser localizado: ";
     getline(cin, codigo);
 
-    for(const auto& roteiro : roteiros) {
+    for(auto &roteiro : roteiros) {
         if (roteiro.codigo == codigo) {
-            cout << "Código: " << roteiro.codigo << ", Descrição: " << roteiro.descricao << ", Preço: " << roteiro.preco << "\n";
+            cout << "Código: " << roteiro.codigo << ", Descrição: " << "\n";
             return;
         }
     }
