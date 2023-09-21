@@ -212,12 +212,11 @@ void alterar_rote(vector<Roteiro> &roteiros)
       }else{
         cout << "Duração Prevista não alterada!!" << endl;
       }
-
+      limpar_buffer();
       cout << "Você deseja alterar a Origem? (S/N): ";
       cin >> resp;
       if (resp == "s" || resp == "sim"){
         cout << "Informe a nova Origem: ";
-        limpar_buffer();
         getline(cin, roteiro.origem);
       }else{
         cout << "Origem não alterada!!" << endl;
@@ -227,7 +226,6 @@ void alterar_rote(vector<Roteiro> &roteiros)
       cin >> resp;
       if (resp == "s" || resp == "sim"){
         cout << "Informe o novo Destino: ";
-        limpar_buffer();
         getline(cin, roteiro.destino);
       }
 
