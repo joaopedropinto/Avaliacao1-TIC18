@@ -173,10 +173,10 @@ void alterar_rote(vector<Roteiro> &roteiros)
 
       cout << "Você deseja alterar Data e Hora Prevista?(S/N)" << endl;
       cin >> resp;
+      limpar_buffer();
 
       if (resp == "s" || resp == "sim"){
         cout << "Informe a nova Data e Hora Prevista (formato dd/mm/aaaa hh:mm): ";
-        limpar_buffer();
         getline(cin, roteiro.data_horaPrevista);
 
         while(true){
@@ -212,9 +212,9 @@ void alterar_rote(vector<Roteiro> &roteiros)
       }else{
         cout << "Duração Prevista não alterada!!" << endl;
       }
-      limpar_buffer();
       cout << "Você deseja alterar a Origem? (S/N): ";
       cin >> resp;
+      limpar_buffer();
       if (resp == "s" || resp == "sim"){
         cout << "Informe a nova Origem: ";
         getline(cin, roteiro.origem);
@@ -224,6 +224,7 @@ void alterar_rote(vector<Roteiro> &roteiros)
 
       cout << "Você deseja alterar o Destino? (S/N): ";
       cin >> resp;
+      limpar_buffer();
       if (resp == "s" || resp == "sim"){
         cout << "Informe o novo Destino: ";
         getline(cin, roteiro.destino);
