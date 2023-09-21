@@ -3,6 +3,7 @@
 #include <ctime>
 #include <vector>
 #include <regex>
+#include <limits>
 
 using namespace std;
 
@@ -28,11 +29,21 @@ bool teste_codigo(const int &codigo, vector<Roteiro> &roteiros)
   }
   return true;
 }
+void limpar_buffer(){
+  cin.clear();
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
 
 bool validar_datahora(const string& dataHora) {
-    regex padrao("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(\\d{4}) (?:[01]\\d|2[0-3]):[0-5]\\d$");
+    regex padrao(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
 
     return regex_match(dataHora, padrao);
+}
+
+bool validar_duracao(const string& duracao){
+  regex padrao("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+  
+  return regex_match(duracao, padrao);
 }
 
 
@@ -60,24 +71,38 @@ void incluir_rote(vector<Roteiro> &roteiros)
     }
   } while(teste == false);
 
-  do{
-    cout << "Informe a Data e Hora Prevista no formato dd/mm/aaaa hh:mm:";
-    cin.ignore();
-    getline(cin, roteiro.data_horaPrevista);
+  cout << "Informe a Data e Hora Prevista (formato dd/mm/aaaa hh:mm): ";
+  limpar_buffer();
+  getline(cin, roteiro.data_horaPrevista);
+
+  while(true){
+
     if(validar_datahora(roteiro.data_horaPrevista)){
-      teste = true;
+      break;
     }else{
       cout << "Data ou hora incorretos! Tente novamente!" << endl;
-      teste = false;
+      cout << "Informe a Data e Hora Prevista (formato dd/mm/aaaa hh:mm): ";
+      getline(cin, roteiro.data_horaPrevista);
     }
 
+  }
+
+  do{
+
+    cout << "Informe a Duração Prevista (formato hh:mm): ";
+    cin >> roteiro.duracaoPrevista;
+    if(validar_duracao(roteiro.duracaoPrevista)){
+      teste = true;
+    }else{
+      cout << "Duração incorreta! Tente novamente!" << endl;
+      teste = false;
+    }
   }while(teste == false);
 
-  cout << "Informe a Duração Prevista: ";
-  getline(cin, roteiro.duracaoPrevista);
-
   cout << "Informe a Origem: ";
+  limpar_buffer();
   getline(cin, roteiro.origem);
+  
 
   cout << "Informe o Destino: ";
   getline(cin, roteiro.destino);
@@ -102,7 +127,6 @@ void excluir_rote(vector<Roteiro> &roteiros)
       return;
     }
   }
-
   cout << "Código " << codigo << " não encontrado!" << endl;
 }
 
@@ -151,19 +175,40 @@ void alterar_rote(vector<Roteiro> &roteiros)
       cin >> resp;
 
       if (resp == "s" || resp == "sim"){
-        cout << "Informe a nova Data e Hora Prevista: " << endl;
-        cin.ignore();
+        cout << "Informe a nova Data e Hora Prevista (formato dd/mm/aaaa hh:mm): ";
+        limpar_buffer();
         getline(cin, roteiro.data_horaPrevista);
+
+        while(true){
+
+          if(validar_datahora(roteiro.data_horaPrevista)){
+            break;
+          }else{
+            cout << "Data ou hora incorretos! Tente novamente!" << endl;
+            cout << "Informe a nova Data e Hora Prevista (formato dd/mm/aaaa hh:mm): ";
+            getline(cin, roteiro.data_horaPrevista);
+          }
+        }
+
       }else{
         cout << "Data e Hora Prevista não alteradas!" << endl;
       }
-
       cout << "Você deseja alterar a Duração Prevista?(S/N)" << endl;
       cin >> resp;
+
       if (resp == "s" || resp == "sim"){
-        cout << "Informe a nova Duração Prevista: " << endl;
-        cin.ignore();
-        getline(cin, roteiro.duracaoPrevista);
+        do{
+          cout << "Informe a nova Duração Prevista (formato hh:mm): ";
+          cin >> roteiro.duracaoPrevista;
+          if(validar_duracao(roteiro.duracaoPrevista)){
+            teste = true;
+          }else{
+            cout << "Duração incorreta! Tente novamente!" << endl;
+            teste = false;
+          }
+
+      }while(teste == false);
+
       }else{
         cout << "Duração Prevista não alterada!!" << endl;
       }
@@ -172,7 +217,7 @@ void alterar_rote(vector<Roteiro> &roteiros)
       cin >> resp;
       if (resp == "s" || resp == "sim"){
         cout << "Informe a nova Origem: ";
-        cin.ignore();
+        limpar_buffer();
         getline(cin, roteiro.origem);
       }else{
         cout << "Origem não alterada!!" << endl;
@@ -182,7 +227,7 @@ void alterar_rote(vector<Roteiro> &roteiros)
       cin >> resp;
       if (resp == "s" || resp == "sim"){
         cout << "Informe o novo Destino: ";
-        cin.ignore();
+        limpar_buffer();
         getline(cin, roteiro.destino);
       }
 

@@ -3,6 +3,8 @@
 #include <ctime>
 #include <vector>
 #include <cstdlib>
+#include <regex>
+
 
 using namespace std;
 
@@ -20,35 +22,11 @@ struct Passageiro
     string numAutorizacao;
 };
 
-bool teste_digito(const string &cpf)
-{
-    for (char c : cpf)
-    {
-        if (!isdigit(c))
-        {
-            return false;
-        }
-    }
-    return true;
-}
 
-bool valida_cpf(const string &cpf, vector<Passageiro> &passageiros)
+bool valida_cpf(const string &cpf)
 {
-    if (cpf.length() != 11 || !teste_digito(cpf))
-    {
-        return false;
-    }
-    else
-    {
-        for (auto &passageiro : passageiros)
-        {
-            if (passageiro.cpf == cpf)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+    regex regexCPF(R"(\d{3}\.\d{3}\.\d{3}-\d{2})");
+    return regex_match(cpf,regexCPF);
 }
 
 bool data_valida(int dia, int mes, int ano)
@@ -91,9 +69,9 @@ int calcula_idade(int dia, int mes, int ano){
     tmNasc.tm_mon = mes - 1;     
     tmNasc.tm_mday = dia;  
 
-    time_t dataNascT = std::mktime(&tmNasc);
+    //time_t dataNascT = mktime(&tmNasc);
 
-    std::tm* tmAtual = std::localtime(&agora);
+    tm* tmAtual = localtime(&agora);
 
     int idade = tmAtual->tm_year - tmNasc.tm_year;
 
@@ -107,7 +85,6 @@ int calcula_idade(int dia, int mes, int ano){
 
 void incluir_pass(vector<Passageiro> &passageiros)
 {
-
     int idade, dia, mes, ano;
     string cpf;
     Passageiro passageiro;
@@ -115,9 +92,9 @@ void incluir_pass(vector<Passageiro> &passageiros)
 
     do
     {
-        cout << "Informe o CPF do passageiro a ser incluído (apenas dígitos): " << endl;
+        cout << "Informe o CPF do passageiro a ser incluído (no formato xxx.xxx.xxx-xx): " << endl;
         cin >> cpf;
-        if (valida_cpf(cpf, passageiros))
+        if (valida_cpf(cpf))
         {
             passageiro.cpf = cpf;
             teste = true;
@@ -268,7 +245,6 @@ void alterar_pass(vector<Passageiro> &passageiros)
 
                     if (data_valida(dia, mes, ano))
                     {
-
                         passageiro.dtNascimento.dia = dia;
                         passageiro.dtNascimento.mes = mes;
                         passageiro.dtNascimento.ano = ano;

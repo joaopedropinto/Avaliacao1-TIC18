@@ -32,3 +32,6 @@
 *.app
 .vscode/settings.json
 Joao/output/Avaliacao_1_Individual
+Joao/output/Gestao_Passageiro_Individual
+.gitignore
+Joao/output/Gestao_Roteiro_Individual
