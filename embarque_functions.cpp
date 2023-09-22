@@ -290,6 +290,7 @@ void criaOcorrencia(vector<Embarque> &embarques)
 {
     regex datahoraValida(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
     string codigo, cpf;
+    bool existe = false;
 
     cout << "\nInforme o CPF do passageiro (xxx.xxx.xxx-xx): ";
     cin >> cpf;
@@ -299,7 +300,7 @@ void criaOcorrencia(vector<Embarque> &embarques)
 
     for (Embarque &it : embarques)
     {
-        if (it.roteiro.codigo == codigo && it.passageiro.cpf == cpf)
+        if (it.roteiro.codigo == codigo && it.passageiro.cpf == cpf && it.ocorrencia.descricao == "Sem ocorrências")
         {
             cout << "Informe a descrição da ocorrência: ";
             cin.ignore();
@@ -326,9 +327,16 @@ void criaOcorrencia(vector<Embarque> &embarques)
 
             cout << "\nOcorrência registrada com sucesso!" << endl;
             return;
+        } else {
+            existe = true;
         }
     }
 
+    if(existe) {
+        cout << "Embarque não encontrado com esse código ou CPF ou já existe uma ocorrência para esse passageiro e roteiro!" << endl;
+        return;
+    }
+    
     cout << "Embarque não encontrado com esse código ou CPF!" << endl;
 }
 
@@ -471,13 +479,14 @@ void registraOcorrenciaPorRoteiro(vector<Embarque> &embarques)
 {
     regex datahoraValida(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
     string codigo;
+    bool existe = false;
 
     cout << "\nInforme o código do roteiro: ";
     cin >> codigo;
 
     for (Embarque &it : embarques)
     {
-        if (it.roteiro.codigo == codigo)
+        if (it.roteiro.codigo == codigo && it.ocorrencia.descricao == "Sem ocorrências")
         {
             cout << "Informe a descrição da ocorrência: ";
             cin >> it.ocorrencia.descricao;
@@ -504,7 +513,14 @@ void registraOcorrenciaPorRoteiro(vector<Embarque> &embarques)
 
             cout << "Ocorrência registrada com sucesso!" << endl;
             return;
+        } else {
+            existe = true;
         }
+    }
+
+    if(existe) {
+        cout << "Já existe uma ocorrência para esse roteiro!" << endl;
+        return;
     }
 
     cout << "Embarque não encontrado com esse código de roteiro!" << endl;
