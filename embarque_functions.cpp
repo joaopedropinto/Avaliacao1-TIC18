@@ -285,3 +285,278 @@ void menuEmbarque(vector<Embarque> &embarques, vector<Passageiro> &passageiros, 
         }
     }
 }
+
+void criaOcorrencia(vector<Embarque> &embarques)
+{
+    regex datahoraValida(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
+    string codigo, cpf;
+
+    cout << "\nInforme o CPF do passageiro (xxx.xxx.xxx-xx): ";
+    cin >> cpf;
+
+    cout << "Informe o código do roteiro: ";
+    cin >> codigo;
+
+    for (Embarque &it : embarques)
+    {
+        if (it.roteiro.codigo == codigo && it.passageiro.cpf == cpf)
+        {
+            cout << "Informe a descrição da ocorrência: ";
+            cin.ignore();
+            getline(cin, it.ocorrencia.descricao);
+
+            cout << "Informe a data e hora real da ocorrência (dd/mm/aaaa hh:mm): ";
+            getline(cin, it.ocorrencia.data_Hora);
+
+            while (true)
+            {
+                if (regex_match(it.ocorrencia.data_Hora, datahoraValida))
+                {
+                    break;
+                }
+                else
+                {
+                    cout << "Data hora inválida (dd/mm/aaaa hh:mm), tente novamente: ";
+                    getline(cin, it.ocorrencia.data_Hora);
+                }
+            }
+
+            cout << "Informe o numero da apólice: ";
+            cin >> it.ocorrencia.numeroApolice;
+
+            cout << "\nOcorrência registrada com sucesso!" << endl;
+            return;
+        }
+    }
+
+    cout << "Embarque não encontrado com esse código ou CPF!" << endl;
+}
+
+void excluirOcorrencia(vector<Embarque> &embarques)
+{
+    string codigo, cpf;
+
+    cout << "\nInforme o CPF do passageiro (xxx.xxx.xxx-xx): ";
+    cin >> cpf;
+
+    cout << "Informe o código do roteiro: ";
+    cin >> codigo;
+
+    for (Embarque &it : embarques)
+    {
+        if (it.roteiro.codigo == codigo && it.passageiro.cpf == cpf)
+        {
+            it.ocorrencia.descricao = "Sem ocorrências";
+            it.ocorrencia.data_Hora = "Sem data hora";
+            it.ocorrencia.numeroApolice = "Sem numero";
+            cout << "Ocorrência excluída com sucesso!" << endl;
+            return;
+        }
+    }
+
+    cout << "Embarque não encontrado com esse código ou CPF!" << endl;
+}
+
+void alteraOcorrencia(vector<Embarque> &embarques)
+{
+    regex datahoraValida(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
+    string codigo, cpf;
+    char decisao;
+
+    cout << "\nInforme o CPF do passageiro (xxx.xxx.xxx-xx): ";
+    cin >> cpf;
+
+    cout << "Informe o código do roteiro: ";
+    cin >> codigo;
+
+    for (Embarque &it : embarques)
+    {
+        if (it.roteiro.codigo == codigo && it.passageiro.cpf == cpf)
+        {
+            cout << "Deseja modificar a descrição? (S/N): ";
+            cin >> decisao;
+
+            if (decisao == 'S' || decisao == 's')
+            {
+                cout << "Informe a descrição da ocorrência: ";
+                cin.ignore();
+                getline(cin, it.ocorrencia.descricao);
+            }
+
+            cout << "Deseja alterar a data hora da ocorrência? (S/N): ";
+            cin >> decisao;
+
+            if (decisao == 's' || decisao == 'S')
+            {
+                cout << "Informe a data e hora real da ocorrência (dd/mm/aaaa hh:mm): ";
+                cin.ignore();
+                getline(cin, it.data_Hora);
+
+                while (true)
+                {
+                    if (regex_match(it.data_Hora, datahoraValida))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Data hora inválida (dd/mm/aaaa hh:mm), tente novamente: ";
+                        getline(cin, it.data_Hora);
+                    }
+                }
+            }
+
+            cout << "Deseja alterar o número da apólice? (S/N): ";
+            cin >> decisao;
+
+            if (decisao == 'S' || decisao == 's')
+            {
+                cout << "Informe número da apólice: ";
+                cin >> it.ocorrencia.numeroApolice;
+            }
+
+            cout << "Ocorrência alterada com sucesso!" << endl;
+            return;
+        }
+    }
+
+    cout << "Embarque não encontrado com esse codigo ou cpf!" << endl;
+}
+
+void listaOcorrenciaPorPassageiro(vector<Embarque> &embarques)
+{
+    string cpf;
+
+    cout << "\nInforme o CPF do passageiro (xxx.xxx.xxx-xx): ";
+    cin >> cpf;
+
+    cout << "Ocorrências desse CPF: " << endl;
+    for (Embarque &it : embarques)
+    {
+        if (it.passageiro.cpf == cpf)
+        {
+            cout << "Descrição: " << it.ocorrencia.descricao << endl;
+            cout << "Data hora: " << it.ocorrencia.data_Hora << endl;
+            cout << "Número da Apólice: " << it.ocorrencia.numeroApolice << endl;
+            return;
+        }
+    }
+
+    cout << "Ocorrência não encontrada com esse CPF!" << endl;
+}
+
+void listaOcorrenciaPorRoteiro(vector<Embarque> &embarques)
+{
+    string codigo;
+
+    cout << "\nInforme o código do roteiro: ";
+    cin >> codigo;
+
+    cout << "Ocorrências desse código de roteiro: " << endl;
+    for (Embarque &it : embarques)
+    {
+        if (it.roteiro.codigo == codigo)
+        {
+            cout << "Descrição: " << it.ocorrencia.descricao << endl;
+            cout << "Data hora: " << it.ocorrencia.data_Hora << endl;
+            cout << "Numero da Apólice: " << it.ocorrencia.numeroApolice << endl;
+            return;
+        }
+    }
+
+    cout << "Ocorrência não encontrada com esse código de roteiro!" << endl;
+}
+
+void registraOcorrenciaPorRoteiro(vector<Embarque> &embarques)
+{
+    regex datahoraValida(R"((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])");
+    string codigo;
+
+    cout << "\nInforme o código do roteiro: ";
+    cin >> codigo;
+
+    for (Embarque &it : embarques)
+    {
+        if (it.roteiro.codigo == codigo)
+        {
+            cout << "Informe a descrição da ocorrência: ";
+            cin >> it.ocorrencia.descricao;
+
+            cout << "Informe a data e hora real da ocorrência (dd/mm/aaaa hh:mm): ";
+            cin.ignore();
+            getline(cin, it.data_Hora);
+
+            while (true)
+            {
+                if (regex_match(it.data_Hora, datahoraValida))
+                {
+                    break;
+                }
+                else
+                {
+                    cout << "Data hora inválida (dd/mm/aaaa hh:mm), tente novamente: ";
+                    getline(cin, it.data_Hora);
+                }
+            }
+
+            cout << "Informe o número da apólice: ";
+            cin >> it.ocorrencia.numeroApolice;
+
+            cout << "Ocorrência registrada com sucesso!" << endl;
+            return;
+        }
+    }
+
+    cout << "Embarque não encontrado com esse código de roteiro!" << endl;
+}
+
+void menuOcorrencia(vector<Embarque> &embarques)
+{
+    while(true){
+
+        cout << endl
+            << "==== Gestão de Ocorrências ==== " << endl
+            << "Serviços disponíveis:" << endl;
+        cout << "1. Incluir ocorrência" << endl;
+        cout << "2. Excluir ocorrência" << endl;
+        cout << "3. Alterar (apenas por código de roteiro e CPF de passageiro)" << endl;
+        cout << "4. Listar por passageiro" << endl;
+        cout << "5. Listar por roteiro" << endl;
+        cout << "6. Registrar ocorrência (por roteiro)" << endl;
+        cout << "0. Voltar ao Menu Principal" << endl;
+        cout << "Escolha uma opção: ";
+
+        int opcao;
+        cin >> opcao;
+
+        switch (opcao)
+        {
+
+        case 1:
+            criaOcorrencia(embarques);
+            break;
+        case 2:
+            excluirOcorrencia(embarques);
+            break;
+        case 3:
+            alteraOcorrencia(embarques);
+            break;
+        case 4:
+            listaOcorrenciaPorPassageiro(embarques);
+            break;
+        case 5:
+            listaOcorrenciaPorRoteiro(embarques);
+            break;
+        case 6:
+            registraOcorrenciaPorRoteiro(embarques);
+            break;
+        case 0:
+            cout << "Voltando ao menu principal..." << endl;
+            return;
+
+        default:
+            cout << "Informe um valor válido!" << endl;
+            break;
+        }
+    }
+}
