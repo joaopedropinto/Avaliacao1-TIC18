@@ -6,5 +6,5 @@ Avaliação 1
 * Felipe Gregue Chaves Pires.
 * Gabriel dos Santos Telles.
 * Kayque Almeida Piton.
-* João Pedro Pinto Gois.
+* João Pedro de Gois Pinto.
 * Valber Francisco dos Santos.
